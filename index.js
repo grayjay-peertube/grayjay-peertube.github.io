@@ -92,7 +92,7 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
     "authorUrl": hostUrl,
     platformUrl,
     sourceUrl,
-    "repositoryUrl": hostUrl,
+    "repositoryUrl": upstramConfigData.data.repositoryUrl,
     scriptUrl,
     "version": upstramConfigData.data.version,
     "scriptSignature": upstramConfigData.data.scriptSignature,
