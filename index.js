@@ -18,12 +18,18 @@ var staticAuth = (req, res, next) => {
   return res.status(404);
 }
 
+const publicFolder = path.join(__dirname, 'public');
+
+app.get('/debug', (req, res) => {
+  res.json({ publicFolder });
+});
+
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(publicFolder));
 
 // Define a route to serve index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
+  res.sendFile(path.join(publicFolder, 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
 // Define your endpoint
