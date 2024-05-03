@@ -19,7 +19,7 @@ var staticAuth = (req, res, next) => {
 }
 
 // Serve static files from the 'public' directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Define a route to serve index.html
 app.get('/', (req, res) => {
