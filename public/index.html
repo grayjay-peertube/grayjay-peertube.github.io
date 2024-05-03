@@ -107,7 +107,7 @@
                     $('[data-toggle="tooltip"]').tooltip();
 
                     // Add click event to show SweetAlert2 alert
-                    $('#instancesTable tbody').on('click', 'tr', function () {
+                    $('#instancesTable tbody').on('dblclick ', 'tr', function () {
                         var data = $('#instancesTable').DataTable().row(this).data();
 
                         if (data.host) {
@@ -125,7 +125,7 @@
                             let qrImg = qr.createImgTag(2, 8, "qr code of " + qrText);
 
                             Swal.fire({
-                                title: 'Qr Code',
+                                title: `Add ${data.host}`,
                                 html: `<div id="qrCode">${qrImg}</div>`,
                                 // icon: 'info',
                                 confirmButtonText: 'OK'
