@@ -17,16 +17,16 @@ app.get('/', (req, res) => {
 app.get('/config.js', (req, res) => {
   // Get the base URL of the server
   const baseUrl = req.protocol + '://' + req.get('host');
-  
+
   // Your dynamic JavaScript content
   const dynamicScript = `
   const apibaseUrl = '${baseUrl}';
   const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
-  
+
   // Set the response content type to JavaScript
   res.setHeader('Content-Type', 'application/javascript');
-  
+
   // Send the dynamic JavaScript content as response
   res.send(dynamicScript);
 });
@@ -82,15 +82,19 @@ app.get('/api/v1/', async (req, res) => {
   const upstramConfigData = await axios.get(upstreamConfig);
 
   const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
+  const hostUrl = `${req.protocol}://${req.hostname}`;
+  const sourceUrl = new URL(`${req.path}?platformUrl=${platformUrl}`, hostUrl).toString();
+
+  // var request = req.
 
   const json = {
     name,
     description,
-    "author": "greyjayplugins.gitlab.io",
-    "authorUrl": "https://greyjayplugins.gitlab.io",
+    "author": hostUrl,
+    "authorUrl": hostUrl,
     platformUrl,
-    "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
-    "repositoryUrl": "https://greyjayplugins.gitlab.io",
+    sourceUrl,
+    "repositoryUrl": hostUrl,
     scriptUrl,
     "version": upstramConfigData.data.version,
     "scriptSignature": upstramConfigData.data.scriptSignature,
