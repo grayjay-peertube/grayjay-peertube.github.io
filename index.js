@@ -41,9 +41,9 @@ app.get('/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
-app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
+app.get('/api/v1/1/pluginConfig.json', async (req, res) => {
 
-  let host = (req.params.platformUrl || '').toLocaleLowerCase();
+  let host = (req.params.platformUrl || 'framatube.org').toLocaleLowerCase();
 
   if (!host) {
     return res.status(400).json({ error: 'platformUrl query parameter is mandatory' });
