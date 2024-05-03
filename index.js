@@ -7,19 +7,11 @@ const path = require('path');
 
 const app = express();
 
-var staticAuth = (req, res, next) => {
-
-  // const authorization = req.header["Authorization"] || req.query["Authorization"];
-
-  // if (authorization != process.env.STATIC_AUTORIZATION) {
-  //   return res.status(404);
-  // }
-
-  next();
-}
+// Serve static files from the 'public' directory
+// app.use(express.static('public'));
 
 // Define a route to serve index.html
-app.get('/', staticAuth, (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
@@ -30,7 +22,7 @@ app.get('/config.js', (req, res) => {
 
   // Your dynamic JavaScript content
   const dynamicScript = `
-  const apibaseUrl = '${baseUrl}';
+  const apibaseUrl = '${baseUrl}/api/v1/pluginConfig.json?platformUrl=';
   const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
 
@@ -41,12 +33,12 @@ app.get('/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
-app.get('/1/pluginConfig.json', async (req, res) => {
+app.get('/api/v1/PluginConfig.json', async (req, res) => {
 
-  let host = (req.params.platformUrl || 'framatube.org').toLocaleLowerCase();
+  let host = (req.query.peerTubePlatformUrl || '').toLocaleLowerCase();
 
   if (!host) {
-    return res.status(400).json({ error: 'platformUrl query parameter is mandatory' });
+    return res.status(400).json({ error: 'peerTubePlatformUrl query parameter is mandatory' });
   }
 
   var platformUrl = `https://${host}`;
@@ -89,25 +81,24 @@ app.get('/1/pluginConfig.json', async (req, res) => {
 
   const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
   const hostUrl = `${req.protocol}://${req.hostname}`;
-  const sourceUrl = new URL(`/api/v1/${host}/pluginConfig.json`, hostUrl).toString();
+  const sourceUrl = new URL(`${req.path}?peerTubePlatformUrl=${host}`, hostUrl).toString();
 
   // var request = req.
 
-  const json = 
-  {
-    "name": "Archworks",
-    "description": "A plugin that adds PeerTube as a source",
-    "author": "FUTO",
-    "authorUrl": "https://greyjayplugins.gitlab.io",
-    "platformUrl": "https://tube.archworks.co",
-    "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
-    "repositoryUrl": "https://greyjayplugins.gitlab.io",
-    "scriptUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeScript.js",
-    "version": 1,
-    "scriptSignature": "K6OB+EucIBi4cg3lbgFJtONNXhc7l2ZbTbpHL31XgC0jBA6EHoXY88MDNwpR/cIIvw8IrMTJA3KoqOpP5H1SDkiV7q1qE9OvxvmUQ/r+J92FnCxXuqUyN6x4nW262ABqGC9Ou4YsHEE43Ko69CNNMn0zOKyrk0UAwK8BSWw0IhJ6lppW04bhL3xP2cErQNaPLY8FgndOM1jFd5afVs6xQnryoJjQhBLwtnlyNJjW+ppD4MCNMVhb7roEN4QtgO/ZZsEm2OdRme4LDDI2/ZA+EHgCHj4qlfJ6asyEfNYCnkD3H6gLAaKwzxt8GMmqcGjTDN7JVIZ/rhEVOxRToDYiew==",
-    "scriptPublicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqxO0IUiv/1K1y7I9Q+p5jC9zhNv3xohb6UBaDWEQQOqQgk7KwoOiKfirOPTpGWy6qO36UASwf2ztXeAlNZhxe+JFAvXhA60VLXOCrZSYf+gakqxbho2OWom3tFnPpI3XcZH1hkezFFZ/xWiidYWFiPUaRSK+4i3s9sy3b6HafwnOPhubxguyRW7WcS8Oqc49vejlyR0ayqD3XYlsGo1hV2TyxMM+6nQrbQsjFNuI2cbYIHU69iHjeFOKHp8DyH95SdH456UNuXTsD6iQZUMx16AczQgeLeBHnhhdPElnoC8TeoNphAxKBz47THDsAsMo/s/FYpJok7M5gNWMKo8cpwIDAQAB",
+  const json = {
+    name,
+    description,
+    "author": hostUrl,
+    "authorUrl": hostUrl,
+    platformUrl,
+    sourceUrl,
+    "repositoryUrl": hostUrl,
+    scriptUrl,
+    "version": upstramConfigData.data.version,
+    "scriptSignature": upstramConfigData.data.scriptSignature,
+    "scriptPublicKey": upstramConfigData.data.scriptPublicKey,
     "iconUrl": "./peertube.png",
-    "id": "b2a6e8d2-8b29-4d42-a9c7-5c1d8e4b53b7",
+    id,
     "packages": [
       "Http"
     ],
@@ -116,10 +107,10 @@ app.get('/1/pluginConfig.json', async (req, res) => {
       "everywhere"
     ],
     "constants": {
-      "baseUrl": "https://tube.archworks.co"
+      "baseUrl": platformUrl
     }
   }
-  
+
 
   res.json(json);
 });
