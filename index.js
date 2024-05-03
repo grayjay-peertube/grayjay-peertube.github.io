@@ -12,10 +12,10 @@ var staticAuth = (req, res, next) => {
   const authorization = req.header["Authorization"] || req.query["Authorization"];
   
   if (authorization != process.env.STATIC_AUTORIZATION) {
-    next();
+    return res.status(404);
   }
-
-  return res.status(404);
+  
+  next();
 }
 
 // Define a route to serve index.html
@@ -41,7 +41,7 @@ app.get('/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
-app.get('/api/v1/:platformUrl', async (req, res) => {
+app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
 
   let host = (req.params.platformUrl || '').toLocaleLowerCase();
 
@@ -89,7 +89,7 @@ app.get('/api/v1/:platformUrl', async (req, res) => {
 
   const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
   const hostUrl = `${req.protocol}://${req.hostname}`;
-  const sourceUrl = new URL(`${req.path}?platformUrl=${platformUrl}`, hostUrl).toString();
+  const sourceUrl = new URL(`/api/v1/${host}/pluginConfig.json`, hostUrl).toString();
 
   // var request = req.
 
