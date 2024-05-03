@@ -24,7 +24,7 @@ app.get('/', staticAuth, (req, res) => {
 });
 
 // Define your endpoint
-app.get('/config.js', staticAuth, (req, res) => {
+app.get('/config.js', (req, res) => {
   // Get the base URL of the server
   const baseUrl = req.protocol + '://' + req.get('host');
 
