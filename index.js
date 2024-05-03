@@ -94,19 +94,19 @@ app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
   // var request = req.
 
   const json = {
-    name,
-    description,
-    "author": "peertubegrayjay-labs",
-    "authorUrl": "https://peertubegrayjay-labs.httpstools.com/",
-    platformUrl,
+    "name": "Archworks",
+    "description": "A plugin that adds PeerTube as a source",
+    "author": "FUTO",
+    "authorUrl": "https://greyjayplugins.gitlab.io",
+    "platformUrl": "https://tube.archworks.co",
     "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
     "repositoryUrl": "https://greyjayplugins.gitlab.io",
-    scriptUrl,
-    "version": upstramConfigData.data.version,
-    "scriptSignature": upstramConfigData.data.scriptSignature,
-    "scriptPublicKey": upstramConfigData.data.scriptPublicKey,
+    "scriptUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeScript.js",
+    "version": 1,
+    "scriptSignature": "K6OB+EucIBi4cg3lbgFJtONNXhc7l2ZbTbpHL31XgC0jBA6EHoXY88MDNwpR/cIIvw8IrMTJA3KoqOpP5H1SDkiV7q1qE9OvxvmUQ/r+J92FnCxXuqUyN6x4nW262ABqGC9Ou4YsHEE43Ko69CNNMn0zOKyrk0UAwK8BSWw0IhJ6lppW04bhL3xP2cErQNaPLY8FgndOM1jFd5afVs6xQnryoJjQhBLwtnlyNJjW+ppD4MCNMVhb7roEN4QtgO/ZZsEm2OdRme4LDDI2/ZA+EHgCHj4qlfJ6asyEfNYCnkD3H6gLAaKwzxt8GMmqcGjTDN7JVIZ/rhEVOxRToDYiew==",
+    "scriptPublicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqxO0IUiv/1K1y7I9Q+p5jC9zhNv3xohb6UBaDWEQQOqQgk7KwoOiKfirOPTpGWy6qO36UASwf2ztXeAlNZhxe+JFAvXhA60VLXOCrZSYf+gakqxbho2OWom3tFnPpI3XcZH1hkezFFZ/xWiidYWFiPUaRSK+4i3s9sy3b6HafwnOPhubxguyRW7WcS8Oqc49vejlyR0ayqD3XYlsGo1hV2TyxMM+6nQrbQsjFNuI2cbYIHU69iHjeFOKHp8DyH95SdH456UNuXTsD6iQZUMx16AczQgeLeBHnhhdPElnoC8TeoNphAxKBz47THDsAsMo/s/FYpJok7M5gNWMKo8cpwIDAQAB",
     "iconUrl": "./peertube.png",
-    id,
+    "id": "b2a6e8d2-8b29-4d42-a9c7-5c1d8e4b53b7",
     "packages": [
       "Http"
     ],
@@ -115,9 +115,10 @@ app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
       "everywhere"
     ],
     "constants": {
-      "baseUrl": platformUrl
+      "baseUrl": "https://tube.archworks.co"
     }
   };
+
   res.json(json);
 });
 
