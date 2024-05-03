@@ -13,6 +13,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
+// Middleware to set the Content-Type header for JavaScript files
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
+
 // Define your endpoint
 app.get('/config.js', (req, res) => {
   // Get the base URL of the server
