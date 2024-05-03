@@ -20,10 +20,6 @@ var staticAuth = (req, res, next) => {
 
 const publicFolder = path.join(__dirname, 'public');
 
-app.get('/debug', (req, res) => {
-  res.json({ publicFolder });
-});
-
 // Serve static files from the 'public' directory
 app.use(express.static(publicFolder));
 
