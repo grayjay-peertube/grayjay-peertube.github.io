@@ -110,7 +110,7 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
     "version": upstramConfigData.data.version,
     "scriptSignature": upstramConfigData.data.scriptSignature,
     "scriptPublicKey": upstramConfigData.data.scriptPublicKey,
-    "iconUrl": "./peertube.png",
+    "iconUrl": new URL("./peertube.png", hostUrl).toString(),
     id,
     "packages": [
       "Http"
