@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 // Define your endpoint
 app.get('/config.js', (req, res) => {
   // Get the base URL of the server
-  const baseUrl = req.protocol + '://' + req.get('host');
+  const baseUrl = (process.env.PROTOCOL || req.protocol) + '://' + req.get('host');
 
   // Your dynamic JavaScript content
   const dynamicScript = `
@@ -80,7 +80,7 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
   const upstramConfigData = await axios.get(upstreamConfig);
 
   const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
-  const hostUrl = `${req.protocol}://${req.hostname}`;
+  const hostUrl = `${(process.env.PROTOCOL || req.protocol)}://${req.hostname}`;
   const sourceUrl = new URL(`${req.path}?peerTubePlatformUrl=${host}`, hostUrl).toString();
 
   // var request = req.
