@@ -18,6 +18,14 @@ var staticAuth = (req, res, next) => {
   return res.status(404);
 }
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
+// Define a route to serve index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
+});
+
 // Define your endpoint
 app.get('/js/config.js', (req, res) => {
   // Get the base URL of the server
@@ -116,14 +124,6 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
 
 
   res.json(json);
-});
-
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
-
-// Define a route to serve index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
 
