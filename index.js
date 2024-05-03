@@ -10,11 +10,11 @@ const app = express();
 var staticAuth = (req, res, next) => {
 
   // const authorization = req.header["Authorization"] || req.query["Authorization"];
-  
+
   // if (authorization != process.env.STATIC_AUTORIZATION) {
   //   return res.status(404);
   // }
-  
+
   next();
 }
 
@@ -99,8 +99,8 @@ app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
     "author": hostUrl,
     "authorUrl": hostUrl,
     platformUrl,
-    sourceUrl,
-    "repositoryUrl": hostUrl,
+    "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
+    "repositoryUrl": "https://greyjayplugins.gitlab.io",
     scriptUrl,
     "version": upstramConfigData.data.version,
     "scriptSignature": upstramConfigData.data.scriptSignature,
