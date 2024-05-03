@@ -7,7 +7,25 @@ const app = express();
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-app.get('/v1/', async (req, res) => {
+// Define your endpoint
+app.get('/config.js', (req, res) => {
+  // Get the base URL of the server
+  const baseUrl = req.protocol + '://' + req.get('host');
+  
+  // Your dynamic JavaScript content
+  const dynamicScript = `
+  const apibaseUrl = '${baseUrl}';
+  const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
+  `;
+  
+  // Set the response content type to JavaScript
+  res.setHeader('Content-Type', 'application/javascript');
+  
+  // Send the dynamic JavaScript content as response
+  res.send(dynamicScript);
+});
+
+app.get('/api/v1/', async (req, res) => {
 
   const platformUrl = (req.query.platformUrl || '').toLocaleLowerCase();
 

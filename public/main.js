@@ -2,7 +2,7 @@ $(document).ready(function () {
     // Initialize DataTable
     $('#instancesTable').DataTable({
         ajax: {
-            url: 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740',
+            url: peerTubeInstancesBaseUrl,
             dataSrc: 'data'
         },
         columns: [
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
                     // Get the text of the host:
 
-                    const qrText = `http://localhost:3000/?platformUrl=https://${data.host}`
+                    const qrText = `${apibaseUrl}/?platformUrl=https://${data.host}`
                     // Make the QR code:
                     let qr = qrcode(0, 'L');
                     qr.addData(qrText);
