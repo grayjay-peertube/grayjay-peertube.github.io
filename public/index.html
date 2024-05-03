@@ -68,7 +68,7 @@
     <script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
 
     <script src="./config.js"></script>
-    
+
     <script>
         $(document).ready(function () {
             // Initialize DataTable
@@ -127,8 +127,9 @@
                         if (data.host) {
 
                             // Get the text of the host:
-
-                            const qrText = `${apibaseUrl}/?platformUrl=https://${data.host}`
+                            debugger;
+                            const qrText = `${apibaseUrl}=${data.host}`
+                            debugger;
                             // Make the QR code:
                             let qr = qrcode(0, 'L');
                             qr.addData(qrText);

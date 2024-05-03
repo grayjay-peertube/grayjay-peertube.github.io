@@ -20,7 +20,7 @@ app.get('/config.js', (req, res) => {
 
   // Your dynamic JavaScript content
   const dynamicScript = `
-  const apibaseUrl = '${baseUrl}';
+  const apibaseUrl = '${baseUrl}/api/v1?platformUrl=';
   const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
 
