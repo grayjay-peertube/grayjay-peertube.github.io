@@ -30,7 +30,7 @@ app.get('/config.js', (req, res) => {
 
   // Your dynamic JavaScript content
   const dynamicScript = `
-  const apibaseUrl = '${baseUrl}/api/v1?platformUrl=https://';
+  const apibaseUrl = '${baseUrl}/api/v1';
   const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
 
@@ -41,25 +41,21 @@ app.get('/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
-app.get('/api/v1/', async (req, res) => {
+app.get('/api/v1/:platformUrl', async (req, res) => {
 
-  const platformUrl = (req.query.platformUrl || '').toLocaleLowerCase();
+  let host = (req.params.platformUrl || '').toLocaleLowerCase();
 
-  if (!platformUrl) {
+  if (!host) {
     return res.status(400).json({ error: 'platformUrl query parameter is mandatory' });
   }
 
-  let platformUrlUrl = {};
+  var platformUrl = `https://${host}`;
 
   try {
-    platformUrlUrl = new URL(platformUrl);
+    let platformUrlUrl = new URL(platformUrl);
   } catch (error) {
     console.error('Error validating PeerTube instance:', error.message);
     return res.status(400).json({ error: 'Invalid PeerTube instance URL' });
-  }
-
-  if (!platformUrlUrl.protocol || platformUrlUrl.protocol != 'https:') {
-    return res.status(400).json({ error: 'https protocol is required' });
   }
 
   let instanceConfig = {};
@@ -77,7 +73,7 @@ app.get('/api/v1/', async (req, res) => {
 
   const id = crypto
     .createHash('md5')
-    .update(platformUrlUrl.host)
+    .update(host)
     .digest('hex')
     .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5'); // Generate UUID based on the platformUrl
 
