@@ -9,11 +9,11 @@ const app = express();
 
 var staticAuth = (req, res, next) => {
 
-  const authorization = req.header["Authorization"] || req.query["Authorization"];
+  // const authorization = req.header["Authorization"] || req.query["Authorization"];
   
-  if (authorization != process.env.STATIC_AUTORIZATION) {
-    return res.status(404);
-  }
+  // if (authorization != process.env.STATIC_AUTORIZATION) {
+  //   return res.status(404);
+  // }
   
   next();
 }
