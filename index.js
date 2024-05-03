@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
@@ -5,16 +7,24 @@ const path = require('path');
 
 const app = express();
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
+var staticAuth = (req, res, next) => {
+
+  const authorization = req.header["Authorization"] || req.query["Authorization"];
+  
+  if (authorization != process.env.STATIC_AUTORIZATION) {
+    next();
+  }
+
+  return res.status(404);
+}
 
 // Define a route to serve index.html
-app.get('/', (req, res) => {
+app.get('/', staticAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
 // Define your endpoint
-app.get('/config.js', (req, res) => {
+app.get('/config.js', staticAuth, (req, res) => {
   // Get the base URL of the server
   const baseUrl = req.protocol + '://' + req.get('host');
 
