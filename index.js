@@ -96,8 +96,8 @@ app.get('/api/v1/:platformUrl/pluginConfig.json', async (req, res) => {
   const json = {
     name,
     description,
-    "author": hostUrl,
-    "authorUrl": hostUrl,
+    "author": "peertubegrayjay-labs",
+    "authorUrl": "https://peertubegrayjay-labs.httpstools.com/",
     platformUrl,
     "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
     "repositoryUrl": "https://greyjayplugins.gitlab.io",
