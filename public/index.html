@@ -128,7 +128,7 @@
 
                             // Get the text of the host:
                             debugger;
-                            const qrText = `${apibaseUrl}/1/PluginConfig.json`
+                            const qrText = `${apibaseUrl}${data.host}`;
                             debugger;
                             // Make the QR code:
                             let qr = qrcode(0, 'L');
