@@ -69,7 +69,7 @@
                         data: 'host',
                         render: function (data) {
                             // Render the host as a hyperlink using string interpolation
-                            return `<a href="https://${data}" target="_blank">${data}</a>`;
+                            return `<a href="https://${data}" target="_blank" rel=noopener>${data}</a>`;
                         }
                     },
                     {
