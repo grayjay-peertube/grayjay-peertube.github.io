@@ -7,13 +7,24 @@ const crypto = require('crypto');
 
 const app = express();
 
+var staticAuth = (req, res, next) => {
+
+  const authorization = req.header["Authorization"] || req.query["Authorization"];
+  
+  if (authorization != process.env.STATIC_AUTORIZATION) {
+    next();
+  }
+
+  return res.status(404);
+}
+
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
 // Define a route to serve index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
-});
+}, staticAuth);
 
 // Define your endpoint
 app.get('/config.js', (req, res) => {
