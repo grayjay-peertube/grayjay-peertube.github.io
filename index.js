@@ -30,7 +30,7 @@ app.get('/config.js', (req, res) => {
 
   // Your dynamic JavaScript content
   const dynamicScript = `
-  const apibaseUrl = '${baseUrl}/api/v1';
+  const apibaseUrl = '${baseUrl}';
   const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
 
@@ -41,7 +41,7 @@ app.get('/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
-app.get('/api/v1/1/pluginConfig.json', async (req, res) => {
+app.get('/1/pluginConfig.json', async (req, res) => {
 
   let host = (req.params.platformUrl || 'framatube.org').toLocaleLowerCase();
 
@@ -99,7 +99,7 @@ app.get('/api/v1/1/pluginConfig.json', async (req, res) => {
     "author": "FUTO",
     "authorUrl": "https://greyjayplugins.gitlab.io",
     "platformUrl": "https://tube.archworks.co",
-    "sourceUrl": "https://peertubegrayjay-labs.httpstools.com/api/v1/1/PluginConfig.json",
+    "sourceUrl": "https://peertubegrayjay-labs.httpstools.com/1/PluginConfig.json",
     "repositoryUrl": "https://greyjayplugins.gitlab.io",
     "scriptUrl": "https://plugins.grayjay.app/PeerTube/PeerTubeScript.js",
     "version": 1,
