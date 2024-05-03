@@ -87,7 +87,7 @@ app.get('/v1/', async (req, res) => {
   res.json(json);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
 });
