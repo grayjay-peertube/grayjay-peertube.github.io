@@ -93,15 +93,16 @@ app.get('/1/pluginConfig.json', async (req, res) => {
 
   // var request = req.
 
-  const json = {
+  const json = 
+  {
     "name": "Archworks",
     "description": "A plugin that adds PeerTube as a source",
     "author": "FUTO",
     "authorUrl": "https://greyjayplugins.gitlab.io",
     "platformUrl": "https://tube.archworks.co",
-    "sourceUrl": "https://peertubegrayjay-labs.httpstools.com/1/PluginConfig.json",
+    "sourceUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeConfig.json",
     "repositoryUrl": "https://greyjayplugins.gitlab.io",
-    "scriptUrl": "https://plugins.grayjay.app/PeerTube/PeerTubeScript.js",
+    "scriptUrl": "https://greyjayplugins.gitlab.io/Archworks/PeerTubeScript.js",
     "version": 1,
     "scriptSignature": "K6OB+EucIBi4cg3lbgFJtONNXhc7l2ZbTbpHL31XgC0jBA6EHoXY88MDNwpR/cIIvw8IrMTJA3KoqOpP5H1SDkiV7q1qE9OvxvmUQ/r+J92FnCxXuqUyN6x4nW262ABqGC9Ou4YsHEE43Ko69CNNMn0zOKyrk0UAwK8BSWw0IhJ6lppW04bhL3xP2cErQNaPLY8FgndOM1jFd5afVs6xQnryoJjQhBLwtnlyNJjW+ppD4MCNMVhb7roEN4QtgO/ZZsEm2OdRme4LDDI2/ZA+EHgCHj4qlfJ6asyEfNYCnkD3H6gLAaKwzxt8GMmqcGjTDN7JVIZ/rhEVOxRToDYiew==",
     "scriptPublicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqxO0IUiv/1K1y7I9Q+p5jC9zhNv3xohb6UBaDWEQQOqQgk7KwoOiKfirOPTpGWy6qO36UASwf2ztXeAlNZhxe+JFAvXhA60VLXOCrZSYf+gakqxbho2OWom3tFnPpI3XcZH1hkezFFZ/xWiidYWFiPUaRSK+4i3s9sy3b6HafwnOPhubxguyRW7WcS8Oqc49vejlyR0ayqD3XYlsGo1hV2TyxMM+6nQrbQsjFNuI2cbYIHU69iHjeFOKHp8DyH95SdH456UNuXTsD6iQZUMx16AczQgeLeBHnhhdPElnoC8TeoNphAxKBz47THDsAsMo/s/FYpJok7M5gNWMKo8cpwIDAQAB",
@@ -117,7 +118,8 @@ app.get('/1/pluginConfig.json', async (req, res) => {
     "constants": {
       "baseUrl": "https://tube.archworks.co"
     }
-  };
+  }
+  
 
   res.json(json);
 });
