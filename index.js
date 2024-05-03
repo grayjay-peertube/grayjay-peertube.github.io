@@ -7,6 +7,11 @@ const app = express();
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
+// Define a route to serve index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Assuming index.html is in the 'public' directory
+});
+
 // Define your endpoint
 app.get('/config.js', (req, res) => {
   // Get the base URL of the server
