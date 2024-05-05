@@ -13,7 +13,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="#">PeerTube instances</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -21,14 +21,37 @@
     </nav>
 
     <div class="container mt-5">
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning: PeerTube Instances</strong><br>
+            This site indexes public PeerTube instances sourced from <a rel=noreferrer target="_blank" href="https://instances.joinpeertube.org">instances.joinpeertube.org</a>. It is an a posteriori
+            moderated index and may contain sensitive content. We do not actively moderate the content listed
+            here.<br><br>
+
+            <strong>Please note that:</strong><br>
+            <ul>
+                <li>The inclusion of an instance does not imply endorsement or responsibility for its content.</li>
+                <li>We do not verify the accuracy or legality of the content hosted on listed instances.</li>
+                <li>If you have concerns about specific instances, please go to <a rel=noreferrer target="_blank" href="https://instances.joinpeertube.org">instances.joinpeertube.org</a> and report the instance directly.
+                </li>
+            </ul><br>
+
+            <strong>By using this site, you acknowledge that:</strong><br>
+            <ul>
+                <li>We do not endorse or control the content hosted on listed instances.</li>
+                <li>We reserve the right to remove instances that violate our Terms of Use or moderation policy.</li>
+            </ul><br>
+
+            <strong>If you would like to create your own instances index with custom moderation policies, you are free
+                to do so. This site is based on the GNU Affero GPL v3 license.</strong>
+        </div>
+
         <table id="instancesTable" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Host</th>
                     <th>Name</th>
-                    <th>Total Users</th>
-                    <th>Total Videos</th>
+                    <th>Users</th>
+                    <th>Videos</th>
                     <th>Version</th>
                     <th>Signup Allowed</th>
                     <th>Languages</th>
@@ -55,84 +78,7 @@
 
     <script src="./js/config.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            // Initialize DataTable
-            $('#instancesTable').DataTable({
-                ajax: {
-                    url: peerTubeInstancesBaseUrl,
-                    dataSrc: 'data'
-                },
-                columns: [
-                    { data: 'id' },
-                    {
-                        data: 'host',
-                        render: function (data) {
-                            // Render the host as a hyperlink using string interpolation
-                            return `<a href="https://${data}" target="_blank" rel=noopener>${data}</a>`;
-                        }
-                    },
-                    {
-                        data: 'name',
-                        render: function (data, type, row) {
-                            // Use the name as the text and short description as the tooltip
-                            return `<span data-toggle="tooltip" title="${row.shortDescription}">${data}</span>`;
-                        }
-                    },
-                    { data: 'totalUsers' },
-                    { data: 'totalVideos' },
-                    { data: 'version' },
-                    { data: 'signupAllowed' },
-                    { data: 'languages' },
-                    { data: 'health' },
-                    {
-                        data: 'createdAt',
-                        render: function (data) {
-                            // Format createdAt to display only the date
-                            if (data)
-                                return new Date(data).toLocaleDateString();
-                        }
-                    }
-                ],
-                columnDefs: [
-                    // Handle columns not found
-                    { targets: '_all', defaultContent: '' }
-                ],
-                paging: true, // Enable paging
-                pageLength: 10, // Number of rows per page
-                lengthMenu: [10, 25, 50, 100], // Options for number of rows per page
-                scrollY: false, // Disable vertical scrolling
-                initComplete: function () {
-                    // Initialize tooltips after DataTables is fully initialized
-                    $('[data-toggle="tooltip"]').tooltip();
+    <script src="./main.js"></script>
+</body>
 
-                    // Add click event to show SweetAlert2 alert
-                    $('#instancesTable tbody').on('dblclick ', 'tr', function () {
-                        var data = $('#instancesTable').DataTable().row(this).data();
-
-                        if (data.host) {
-
-                            // Get the text of the host:
-                            const qrText = `${apibaseUrl}${data.host}`;
-                            
-                            // Make the QR code:
-                            let qr = qrcode(0, 'L');
-                            qr.addData(qrText);
-                            qr.make();
-                            // Create an image from it:
-
-
-                            let qrImg = qr.createImgTag(10, 8, "qr code of " + qrText);
-
-                            Swal.fire({
-                                title: `Add ${data.host}`,
-                                html: `<div id="qrCode">${qrImg}</div>`,
-                                // icon: 'info',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+</html>

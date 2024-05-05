@@ -1,4 +1,5 @@
 const path = require('path');
+const axios = require('axios');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 
@@ -42,17 +43,16 @@ app.get('/js/config.js', (req, res) => {
 });
 
 
-app.get('/api/v1/generateQR', async (req, res) => {
+app.get('/api/v1/PluginQR', async (req, res) => {
   try {
 
 
     const { peerTubePlatformUrl } = req.query;
 
-    await core.validatePeerTubeInstance(peerTubePlatformUrl);
+    await core.ValidatePeerTubeInstance(peerTubePlatformUrl);
 
     const protocol = req.protocol;
     const hostname = req.hostname;
-
 
     var hostUrl = core.GetHostUrl(protocol, hostname);
 
@@ -72,7 +72,7 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
     const { peerTubePlatformUrl } = req.query;
     const protocol = req.protocol;
     const hostname = req.hostname;
-    const pluginConfig = await core.getPluginConfig(peerTubePlatformUrl, protocol, hostname);
+    const pluginConfig = await core.GetPluginConfig(peerTubePlatformUrl, protocol, hostname, 10000, axios);
     res.json(pluginConfig);
   } catch (error) {
     console.error('Error generating plugin config:', error.message);
