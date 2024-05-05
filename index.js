@@ -93,7 +93,7 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
   const upstramConfigData = await axios.get(upstreamConfig);
 
   const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
-  const hostUrl = `${(process.env.PROTOCOL || req.protocol)}://${req.hostname}`;
+  const hostUrl = `${(process.env.PROTOCOL || req.protocol)}://${(process.env.CONFIG_HOST || req.hostname)}`;
   const sourceUrl = new URL(`${req.path}?peerTubePlatformUrl=${host}`, hostUrl).toString();
 
   // var request = req.
