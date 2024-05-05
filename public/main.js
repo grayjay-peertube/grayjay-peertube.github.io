@@ -56,8 +56,8 @@ $(document).ready(function () {
 
                 if (data.host) {
                     Swal.fire({
-                        title: `Add ${data.host}`,
-                        html: `<img src="${apiQrUrl}${data.host}">`,
+                        title: `Add ${data.host} to grayjay`,
+                        html: `<a href="https://grayjay.app/#download" target="_blank" rel=noopener>Download grayjay</a></br><img src="${apiQrUrl}${data.host}">`,
                         // icon: 'info',
                         confirmButtonText: 'OK'
                     });
