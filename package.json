@@ -12,7 +12,6 @@
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "lodash.memoize": "^4.1.2",
     "qrcode": "^1.5.3"
   }
 }
