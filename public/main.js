@@ -48,8 +48,6 @@ $(document).ready(function () {
         lengthMenu: [10, 25, 50, 100], // Options for number of rows per page
         scrollY: false, // Disable vertical scrolling
         initComplete: function () {
-            // Initialize tooltips after DataTables is fully initialized
-            $('[data-toggle="tooltip"]').tooltip();
 
             // Add click event to show SweetAlert2 alert
             $('#instancesTable tbody').on('dblclick ', 'tr', function () {
@@ -64,6 +62,10 @@ $(document).ready(function () {
                     });
                 }
             });
+        },
+        draw: function () {
+            $('[data-toggle="tooltip"]').tooltip();
         }
+
     });
 });
