@@ -33,7 +33,7 @@ app.get('/js/config.js', (req, res) => {
   const dynamicScript = `
   const apibaseUrl = '${baseUrl}/api/v1/pluginConfig.json?peerTubePlatformUrl=';
   const apiQrUrl = '${baseUrl}/api/v1/PluginQR?peerTubePlatformUrl=';
-  const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
+  const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
   `;
 
   // Set the response content type to JavaScript
