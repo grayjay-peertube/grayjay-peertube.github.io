@@ -1,22 +1,12 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+
+const core = require('./core');
+
 const express = require('express');
-const axios = require('axios');
-const crypto = require('crypto');
 
 const app = express();
-
-var staticAuth = (req, res, next) => {
-
-  const authorization = req.header["Authorization"] || req.query["Authorization"];
-
-  if (authorization != process.env.STATIC_AUTORIZATION) {
-    next();
-  }
-
-  return res.status(404);
-}
 
 const publicFolder = path.join(__dirname, 'public');
 
@@ -31,7 +21,12 @@ app.get('/', (req, res) => {
 // Define your endpoint
 app.get('/js/config.js', (req, res) => {
   // Get the base URL of the server
-  const baseUrl = (process.env.PROTOCOL || req.protocol) + '://' + req.get('host');
+
+  const protocol = req.protocol;
+  const hostname = req.hostname;
+
+
+  const baseUrl = core.GetHostUrl(protocol, hostname);
 
   // Your dynamic JavaScript content
   const dynamicScript = `
@@ -46,86 +41,43 @@ app.get('/js/config.js', (req, res) => {
   res.send(dynamicScript);
 });
 
+
+app.get('/api/v1/generateQR', async (req, res) => {
+  try {
+
+
+    const { peerTubePlatformUrl } = req.query;
+
+    await core.validatePeerTubeInstance(peerTubePlatformUrl);
+
+    const protocol = req.protocol;
+    const hostname = req.hostname;
+
+
+    var hostUrl = core.GetHostUrl(protocol, hostname);
+
+    const sourceUrl = core.GetConfigUrl(peerTubePlatformUrl, hostUrl);
+
+    const qrCodeImage = await core.GetQRCode(sourceUrl);
+    res.set('Content-Type', 'image/png'); // Set the correct MIME type
+    res.send(qrCodeImage); // Send image directly
+  } catch (err) {
+    console.error('Error generating QR code:', err);
+    res.status(500).send('Invalid PeerTube instance');
+  }
+});
+
 app.get('/api/v1/PluginConfig.json', async (req, res) => {
-
-  let host = (req.query.peerTubePlatformUrl || '').toLocaleLowerCase();
-
-  if (!host) {
-    return res.status(400).json({ error: 'peerTubePlatformUrl query parameter is mandatory' });
-  }
-
-  var platformUrl = `https://${host}`;
-
   try {
-    let platformUrlUrl = new URL(platformUrl);
+    const { peerTubePlatformUrl } = req.query;
+    const protocol = req.protocol;
+    const hostname = req.hostname;
+    const pluginConfig = await core.getPluginConfig(peerTubePlatformUrl, protocol, hostname);
+    res.json(pluginConfig);
   } catch (error) {
-    console.error('Error validating PeerTube instance:', error.message);
-    return res.status(400).json({ error: 'Invalid PeerTube instance URL' });
+    console.error('Error generating plugin config:', error.message);
+    res.status(400).json({ error: error.message });
   }
-
-  let instanceConfig = {};
-
-  // Check if the provided URL is a valid PeerTube instance
-  try {
-    instanceConfig = await axios.get(`${platformUrl}/api/v1/config/`);
-    if (!instanceConfig.data || !instanceConfig.data.instance || !instanceConfig.data.instance.name || !instanceConfig.data.instance.shortDescription) {
-      throw new Error('Invalid PeerTube instance');
-    }
-  } catch (error) {
-    console.error('Error validating PeerTube instance:', error.message);
-    return res.status(400).json({ error: 'Invalid PeerTube instance' });
-  }
-
-  const id = crypto
-    .createHash('md5')
-    .update(host)
-    .digest('hex')
-    .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5'); // Generate UUID based on the platformUrl
-
-  const name = instanceConfig.data.instance.name;
-  const description = instanceConfig.data.instance.shortDescription;
-
-  const pluginBaseUrl = "https://plugins.grayjay.app/PeerTube";
-  const pluginConfigFileName = "PeerTubeConfig.json";
-
-  const upstreamConfig = `${pluginBaseUrl}/${pluginConfigFileName}`;
-
-  const upstramConfigData = await axios.get(upstreamConfig);
-
-  const scriptUrl = new URL(upstramConfigData.data.scriptUrl, `${pluginBaseUrl}/`).toString();
-  const hostUrl = `${(process.env.PROTOCOL || req.protocol)}://${(process.env.CONFIG_HOST || req.hostname)}`;
-  const sourceUrl = new URL(`${req.path}?peerTubePlatformUrl=${host}`, hostUrl).toString();
-
-  // var request = req.
-
-  const json = {
-    name,
-    description,
-    "author": hostUrl,
-    "authorUrl": hostUrl,
-    platformUrl,
-    sourceUrl,
-    "repositoryUrl": upstramConfigData.data.repositoryUrl,
-    scriptUrl,
-    "version": upstramConfigData.data.version,
-    "scriptSignature": upstramConfigData.data.scriptSignature,
-    "scriptPublicKey": upstramConfigData.data.scriptPublicKey,
-    "iconUrl": new URL("./peertube.png", hostUrl).toString(),
-    id,
-    "packages": [
-      "Http"
-    ],
-    "allowEval": false,
-    "allowUrls": [
-      "everywhere"
-    ],
-    "constants": {
-      "baseUrl": platformUrl
-    }
-  }
-
-
-  res.json(json);
 });
 
 
