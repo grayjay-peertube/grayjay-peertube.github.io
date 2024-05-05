@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     const apiQrUrl = '/api/v1/PluginQR?peerTubePlatformUrl=';
-    const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
+    const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
 
     // Initialize DataTable
     $('#instancesTable').DataTable({
@@ -26,6 +26,7 @@ $(document).ready(function () {
             },
             { data: 'totalUsers' },
             { data: 'totalVideos' },
+            { data: 'totalLocalVideos' },
             { data: 'version' },
             { data: 'signupAllowed' },
             { data: 'languages' },
