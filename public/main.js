@@ -21,7 +21,7 @@ $(document).ready(function () {
                 data: 'name',
                 render: function (data, type, row) {
                     // Use the name as the text and short description as the tooltip
-                    return `<span data-toggle="tooltip" title="${row.shortDescription}">${data}</span>`;
+                    return `<span class="tooltip-span" data-toggle="tooltip" title="${row.shortDescription}">${data}</span>`;
                 }
             },
             { data: 'totalUsers' },
@@ -56,8 +56,6 @@ $(document).ready(function () {
                 var data = $('#instancesTable').DataTable().row(this).data();
 
                 if (data.host) {
-
-
                     Swal.fire({
                         title: `Add ${data.host}`,
                         html: `<img src="${apiQrUrl}${data.host}">`,
