@@ -1,4 +1,8 @@
 $(document).ready(function () {
+
+    const apiQrUrl = '/api/v1/PluginQR?peerTubePlatformUrl=';
+    const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=100&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
+
     // Initialize DataTable
     $('#instancesTable').DataTable({
         ajax: {
@@ -53,21 +57,10 @@ $(document).ready(function () {
 
                 if (data.host) {
 
-                    // Get the text of the host:
-                    const qrText = `${apibaseUrl}${data.host}`;
-                    
-                    // Make the QR code:
-                    let qr = qrcode(0, 'L');
-                    qr.addData(qrText);
-                    qr.make();
-                    // Create an image from it:
-
-
-                    let qrImg = qr.createImgTag(10, 8, "qr code of " + qrText);
 
                     Swal.fire({
                         title: `Add ${data.host}`,
-                        html: `<div id="qrCode">${qrImg}</div>`,
+                        html: `<img src="${apiQrUrl}${data.host}">`,
                         // icon: 'info',
                         confirmButtonText: 'OK'
                     });
