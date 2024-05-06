@@ -66,7 +66,8 @@ $(document).ready(function () {
         },
         draw: function () {
             $('[data-toggle="tooltip"]').tooltip();
-        }
+        },
+        responsive: true
 
     });
 });
