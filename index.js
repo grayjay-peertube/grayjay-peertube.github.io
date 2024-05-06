@@ -5,7 +5,6 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const core = require('./core');
 
 const express = require('express');
-const cors = require('cors'); // Import CORS middleware
 
 const app = express();
 
@@ -14,14 +13,18 @@ const publicFolder = path.join(__dirname, 'public');
 // Serve static files from the 'public' directory
 app.use(express.static(publicFolder));
 
-// Define CORS options
-const corsOptions = {
-  origin: '*', // Allow requests from any origin
-  methods: ['GET'], // Allow only GET requests
-};
+if (process.env.ENABLE_CORS == 'true') {
+  const cors = require('cors'); // Import CORS middleware
 
-// Enable CORS middleware with options
-app.use(cors(corsOptions));
+  // Define CORS options
+  const corsOptions = {
+    origin: '*', // Allow requests from any origin
+    methods: ['GET'], // Allow only GET requests
+  };
+
+  // Enable CORS middleware with options
+  app.use(cors(corsOptions));
+}
 
 // Define a route to serve index.html
 app.get('/', (req, res) => {
