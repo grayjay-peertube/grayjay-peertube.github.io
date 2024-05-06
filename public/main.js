@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    const apiQrUrl = '/api/v1/PluginQR?peerTubePlatformUrl=';
+    const apiQrUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginQR?peerTubePlatformUrl=';
     const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
 
     // Initialize DataTable
@@ -13,8 +13,8 @@ $(document).ready(function () {
             {
                 data: 'host',
                 render: function (data) {
-                    // Render the host as a hyperlink using string interpolation
-                    return `<a href="https://${data}" target="_blank" rel=noopener>${data}</a>`;
+                    // Render the host as a hyperlink using template literals
+                    return `<a href="https://${data}" target="_blank" rel="noopener">${data}</a>`;
                 }
             },
             {
@@ -28,9 +28,15 @@ $(document).ready(function () {
             { data: 'totalVideos' },
             { data: 'totalLocalVideos' },
             { data: 'version' },
-            { data: 'signupAllowed' },
+            // { data: 'signupAllowed' },
+            {
+                data: 'signupAllowed',
+                render: function (data) {
+                   return data == true ? 'Yes' : 'No';
+                }
+            },
             // { data: 'languages' },
-            { data: 'health' },
+            // { data: 'health' },
             {
                 data: 'createdAt',
                 render: function (data) {
@@ -64,7 +70,7 @@ $(document).ready(function () {
                 }
             });
         },
-        draw: function () {
+        drawCallback: function () {
             $('[data-toggle="tooltip"]').tooltip();
         },
         responsive: true
