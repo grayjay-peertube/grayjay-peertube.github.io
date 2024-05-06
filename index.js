@@ -19,30 +19,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(publicFolder, 'index.html')); // Assuming index.html is in the 'public' directory
 });
 
-// Define your endpoint
-app.get('/js/config.js', (req, res) => {
-  // Get the base URL of the server
-
-  const protocol = req.protocol;
-  const hostname = req.hostname;
-
-
-  const baseUrl = core.GetHostUrl(protocol, hostname);
-
-  // Your dynamic JavaScript content
-  const dynamicScript = `
-  const apibaseUrl = '${baseUrl}/api/v1/pluginConfig.json?peerTubePlatformUrl=';
-  const apiQrUrl = '${baseUrl}/api/v1/PluginQR?peerTubePlatformUrl=';
-  const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
-  `;
-
-  // Set the response content type to JavaScript
-  res.setHeader('Content-Type', 'application/javascript');
-
-  // Send the dynamic JavaScript content as response
-  res.send(dynamicScript);
-});
-
+// Define your endpointh
 
 app.get('/api/v1/PluginQR', async (req, res) => {
   try {
