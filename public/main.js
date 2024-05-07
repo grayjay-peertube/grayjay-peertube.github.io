@@ -96,7 +96,7 @@ $(document).ready(function () {
                             // Handle the "Open in grayjay" button click
                             // You can add your logic here
                             debugger;
-                            window.location = `${apiConfUrl}=${data.host}`;
+                            window.location = `${apiConfUrl}${data.host}`;
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             // Handle the "Cancel" button click
                             // You can add your logic here
