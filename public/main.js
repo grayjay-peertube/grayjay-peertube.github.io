@@ -1,7 +1,20 @@
 $(document).ready(function () {
 
     const apiQrUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginQR?peerTubePlatformUrl=';
+    const apiConfUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginConfig.json?peerTubePlatformUrl=';
     const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
+
+    // Check if the browser supports custom URI scheme redirection
+    var isSupported = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    function openGrayjayApp() {
+        var appUrl = "grayjay://plugin/https://plugins.grayjay.app/Bilibili/BiliBiliConfig.json";
+
+        if (isSupported) {
+            // Attempt to open the "grayjay" app
+            window.location.href = appUrl;
+        }
+    }
 
     // Initialize DataTable
     $('#instancesTable').DataTable({
@@ -32,7 +45,7 @@ $(document).ready(function () {
             {
                 data: 'signupAllowed',
                 render: function (data) {
-                   return data == true ? 'Yes' : 'No';
+                    return data == true ? 'Yes' : 'No';
                 }
             },
             // { data: 'languages' },
@@ -63,9 +76,31 @@ $(document).ready(function () {
                 if (data.host) {
                     Swal.fire({
                         title: `Add ${data.host} to grayjay`,
-                        html: `<a href="https://grayjay.app/#download" target="_blank" rel=noopener>Download grayjay</a></br><img src="${apiQrUrl}${data.host}">`,
+                        html: `
+                        <a href="https://grayjay.app/#download" target="_blank" rel="noopener">Download grayjay</a>
+                        </br>
+                        <img src="${apiQrUrl}${data.host}">
+                        `,
                         // icon: 'info',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'Open in grayjay',
+                        showCancelButton: true,
+                        showConfirmButton: isSupported,
+                        cancelButtonText: 'Close',
+                        buttonsStyling: false,
+                        customClass: {
+                            confirmButton: 'swal-button',
+                            cancelButton: 'swal-button'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Handle the "Open in grayjay" button click
+                            // You can add your logic here
+                            debugger;
+                            window.location = `${apiConfUrl}=${data.host}`;
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            // Handle the "Cancel" button click
+                            // You can add your logic here
+                        }
                     });
                 }
             });
