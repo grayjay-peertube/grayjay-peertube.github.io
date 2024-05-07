@@ -1,7 +1,10 @@
 $(document).ready(function () {
 
     const apiQrUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginQR?peerTubePlatformUrl=';
-    const apiConfUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginConfig.json?peerTubePlatformUrl=';
+
+
+    
+    const apiConfUrl = 'grayjay://plugin/https://peertube-instances.ir-to.com/api/v1/PluginConfig.json?peerTubePlatformUrl=';
     const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
 
     // Check if the browser supports custom URI scheme redirection
