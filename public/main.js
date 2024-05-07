@@ -43,24 +43,25 @@ $(document).ready(function () {
             { data: 'totalUsers' },
             { data: 'totalVideos' },
             { data: 'totalLocalVideos' },
+            { data: 'totalInstanceFollowers' },
+            { data: 'totalInstanceFollowing' },
             { data: 'version' },
-            // { data: 'signupAllowed' },
             {
                 data: 'signupAllowed',
                 render: function (data) {
                     return data == true ? 'Yes' : 'No';
                 }
             },
-            // { data: 'languages' },
+            { data: 'languages' },
             // { data: 'health' },
-            {
-                data: 'createdAt',
-                render: function (data) {
-                    // Format createdAt to display only the date
-                    if (data)
-                        return new Date(data).toLocaleDateString();
-                }
-            }
+            // {
+            //     data: 'createdAt',
+            //     render: function (data) {
+            //         // Format createdAt to display only the date
+            //         if (data)
+            //             return new Date(data).toLocaleDateString();
+            //     }
+            // }
         ],
         columnDefs: [
             // Handle columns not found
