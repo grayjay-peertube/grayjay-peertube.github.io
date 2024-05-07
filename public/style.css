@@ -1,0 +1,8 @@
+/* Custom CSS */
+.swal2-popup .swal2-actions .swal2-confirm {
+    margin-right: 10px; /* Adjust the margin as per your requirement */
+}
+
+.swal2-popup .swal2-actions .swal2-cancel {
+    margin-left: 10px; /* Adjust the margin as per your requirement */
+}

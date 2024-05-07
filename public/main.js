@@ -88,14 +88,12 @@ $(document).ready(function () {
                         cancelButtonText: 'Close',
                         buttonsStyling: false,
                         customClass: {
-                            confirmButton: 'swal-button',
-                            cancelButton: 'swal-button'
+                            actions: 'btn-group',
+                            confirmButton: 'btn btn-primary mb-2',
+                            cancelButton: 'btn btn-secondary mb-2'
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Handle the "Open in grayjay" button click
-                            // You can add your logic here
-                            debugger;
                             window.location = `${apiConfUrl}${data.host}`;
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             // Handle the "Cancel" button click
