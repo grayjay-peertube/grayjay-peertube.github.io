@@ -49,7 +49,7 @@ $(document).ready(function () {
             { targets: '_all', defaultContent: '' }
         ],
         paging: true, // Enable paging
-        pageLength: 10, // Number of rows per page
+        pageLength: 25, // Number of rows per page
         lengthMenu: [10, 25, 50, 100], // Options for number of rows per page
         scrollY: false, // Disable vertical scrolling
         initComplete: function () {
