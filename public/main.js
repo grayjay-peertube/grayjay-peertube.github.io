@@ -163,7 +163,7 @@ $(document).ready(function () {
             }
 
         }).catch(function(){
-            toastError('Invalid QR Code');
+            toastError('Invalid Peertube instace');
         });
     });
 
