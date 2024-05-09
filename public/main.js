@@ -163,7 +163,7 @@ $(document).ready(function () {
             }
 
         }).catch(function(){
-            toastError('Invalid Peertube instace');
+            toastError('Invalid Peertube instance');
         });
     });
 
