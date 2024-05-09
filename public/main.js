@@ -10,15 +10,6 @@ $(document).ready(function () {
     // Check if the browser supports custom URI scheme redirection
     var isSupported = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    function openGrayjayApp() {
-        var appUrl = "grayjay://plugin/https://plugins.grayjay.app/Bilibili/BiliBiliConfig.json";
-
-        if (isSupported) {
-            // Attempt to open the "grayjay" app
-            window.location.href = appUrl;
-        }
-    }
-
     // Initialize DataTable
     $('#instancesTable').DataTable({
         ajax: {
@@ -52,16 +43,6 @@ $(document).ready(function () {
                     return data == true ? 'Yes' : 'No';
                 }
             },
-            // { data: 'languages' },
-            // { data: 'health' },
-            // {
-            //     data: 'createdAt',
-            //     render: function (data) {
-            //         // Format createdAt to display only the date
-            //         if (data)
-            //             return new Date(data).toLocaleDateString();
-            //     }
-            // }
         ],
         columnDefs: [
             // Handle columns not found
@@ -72,44 +53,50 @@ $(document).ready(function () {
         lengthMenu: [10, 25, 50, 100], // Options for number of rows per page
         scrollY: false, // Disable vertical scrolling
         initComplete: function () {
-
-            // Add click event to show SweetAlert2 alert
             $('#instancesTable tbody').on('dblclick ', 'tr', function () {
-                
                 $('[data-toggle="tooltip"]').tooltip('hide');
-                
                 var data = $('#instancesTable').DataTable().row(this).data();
-
+        
                 if (data.host) {
-                    Swal.fire({
-                        title: `Add ${data.host} to grayjay`,
-                        html: `
-                        <a href="https://grayjay.app/#download" target="_blank" rel="noopener">Download grayjay</a>
-                        </br>
-                        <img src="${apiQrUrl}${data.host}">
-                        `,
-                        // icon: 'info',
-                        confirmButtonText: 'Open in grayjay',
-                        showCancelButton: true,
-                        showConfirmButton: isSupported,
-                        cancelButtonText: 'Close',
-                        buttonsStyling: false,
-                        customClass: {
-                            actions: 'btn-group',
-                            confirmButton: 'btn btn-primary mb-2',
-                            cancelButton: 'btn btn-secondary mb-2'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = `${apiConfUrl}${data.host}`;
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // Handle the "Cancel" button click
-                            // You can add your logic here
-                        }
-                    });
+                    // Show loading state
+                    Swal.showLoading();
+                    
+                    // Create an image element dynamically
+                    var img = new Image();
+                    img.onload = function() {
+                        // Once the image is loaded, create the SweetAlert2 alert
+                        Swal.fire({
+                            title: `Add ${data.host} to grayjay`,
+                            html: `
+                                <a href="https://grayjay.app/#download" target="_blank" rel="noopener">Download grayjay</a>
+                                </br>
+                                <img src="${apiQrUrl}${data.host}">
+                            `,
+                            confirmButtonText: 'Open in grayjay',
+                            showCancelButton: true,
+                            showConfirmButton: isSupported,
+                            cancelButtonText: 'Close',
+                            buttonsStyling: false,
+                            customClass: {
+                                actions: 'btn-group',
+                                confirmButton: 'btn btn-primary mb-2',
+                                cancelButton: 'btn btn-secondary mb-2'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = `${apiConfUrl}${data.host}`;
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                // Handle the "Cancel" button click
+                                // You can add your logic here
+                            }
+                        });
+                    };
+                    
+                    // Set the source of the image
+                    img.src = `${apiQrUrl}${data.host}`;
                 }
             });
-        },
+        },        
         drawCallback: function () {
             $('[data-toggle="tooltip"]').tooltip();
         },
