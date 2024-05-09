@@ -75,6 +75,9 @@ $(document).ready(function () {
 
             // Add click event to show SweetAlert2 alert
             $('#instancesTable tbody').on('dblclick ', 'tr', function () {
+                
+                $('[data-toggle="tooltip"]').tooltip('hide');
+                
                 var data = $('#instancesTable').DataTable().row(this).data();
 
                 if (data.host) {
