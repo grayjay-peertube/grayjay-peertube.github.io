@@ -52,7 +52,7 @@ $(document).ready(function () {
                     return data == true ? 'Yes' : 'No';
                 }
             },
-            { data: 'languages' },
+            // { data: 'languages' },
             // { data: 'health' },
             // {
             //     data: 'createdAt',
