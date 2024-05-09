@@ -43,8 +43,9 @@ $(document).ready(function () {
             { data: 'totalUsers' },
             { data: 'totalVideos' },
             { data: 'totalLocalVideos' },
+            { data: 'totalInstanceFollowers' },
+            { data: 'totalInstanceFollowing' },
             { data: 'version' },
-            // { data: 'signupAllowed' },
             {
                 data: 'signupAllowed',
                 render: function (data) {
@@ -53,14 +54,14 @@ $(document).ready(function () {
             },
             // { data: 'languages' },
             // { data: 'health' },
-            {
-                data: 'createdAt',
-                render: function (data) {
-                    // Format createdAt to display only the date
-                    if (data)
-                        return new Date(data).toLocaleDateString();
-                }
-            }
+            // {
+            //     data: 'createdAt',
+            //     render: function (data) {
+            //         // Format createdAt to display only the date
+            //         if (data)
+            //             return new Date(data).toLocaleDateString();
+            //     }
+            // }
         ],
         columnDefs: [
             // Handle columns not found
@@ -74,6 +75,9 @@ $(document).ready(function () {
 
             // Add click event to show SweetAlert2 alert
             $('#instancesTable tbody').on('dblclick ', 'tr', function () {
+                
+                $('[data-toggle="tooltip"]').tooltip('hide');
+                
                 var data = $('#instancesTable').DataTable().row(this).data();
 
                 if (data.host) {
