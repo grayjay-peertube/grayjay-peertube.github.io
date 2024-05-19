@@ -186,17 +186,6 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     };
 }
 
-// Middleware function for static authorization
-var staticAuth = (req, res, next) => {
-    const authorization = req.header["Authorization"] || req.query["Authorization"];
-
-    if (authorization != process.env.STATIC_AUTORIZATION) {
-        return res.status(404);
-    }
-
-    next();
-}
-
 // Exporting functions
 module.exports = {
     GetHostUrl,
