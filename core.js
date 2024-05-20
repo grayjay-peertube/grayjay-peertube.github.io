@@ -101,7 +101,7 @@ async function ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance) {
     try {
         new URL(platformUrl);
     } catch (error) {
-        throw new Error('Invalid PeerTube instance URL');
+        throw new Error(`Invalid PeerTube instance URL: ${host}`);
     }
 
     let instanceConfig = {};

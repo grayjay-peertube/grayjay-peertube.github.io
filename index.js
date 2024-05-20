@@ -63,6 +63,18 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
   }
 });
 
+// Define your endpoint for validating PeerTube instances
+app.get('/api/v1/validatePeerTube', async (req, res) => {
+  try {
+    const { peerTubePlatformUrl } = req.query;
+    await core.ValidatePeerTubeInstance(peerTubePlatformUrl, axios);
+    res.json({ valid: true });
+  } catch (err) {
+    console.error('Error validating PeerTube instance:', err);
+    res.json({ valid: false });
+  }
+});
+
 const port = process.env.PORT || 80;
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);

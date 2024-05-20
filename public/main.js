@@ -8,11 +8,13 @@ $(document).ready(function () {
         }, 3000);
     }
 
+    const apiBaseUrl='https://peertube-instances.ir-to.com';
 
 
-    const apiQrUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginQR?peerTubePlatformUrl=';
+    const apiQrUrl = `${apiBaseUrl}/api/v1/PluginQR?peerTubePlatformUrl=`;
+    const apiValidateUrl = `${apiBaseUrl}/api/v1/validatePeerTube?peerTubePlatformUrl=`;
+    const apiConfUrl = `grayjay://plugin/${apiBaseUrl}/api/v1/PluginConfig.json?peerTubePlatformUrl=`;
 
-    const apiConfUrl = 'grayjay://plugin/https://peertube-instances.ir-to.com/api/v1/PluginConfig.json?peerTubePlatformUrl=';
     const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
 
     // Check if the browser supports custom URI scheme redirection
@@ -33,45 +35,75 @@ $(document).ready(function () {
         window.location = `${apiConfUrl}${host}`;
     }
 
-    function showQrCode(host) {
+    function showQrCodeInSwal(html, host){
+        Swal.fire({
+            title: 'Scan to add to Grayjay',
+            html,
+            confirmButtonText: 'Open in grayjay',
+            showCancelButton: true,
+            showConfirmButton: isSupported,
+            cancelButtonText: 'Close',
+            buttonsStyling: false,
+            customClass: {
+                actions: 'btn-group',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                openInGrayJay(host);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Handle the "Cancel" button click
+                // You can add your logic here
+            }
+        });
+    }
+
+    async function validateUrl(apiValidateUrl, host) {
+        try {
+            const response = await fetch(`${apiValidateUrl}${encodeURIComponent(host)}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.valid) {
+                return host;
+            } else {
+                throw new Error('Failed to generate QR code. Please try again.');
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    function showQrCode(host, generateOnClientSide = true) {
 
         $('[data-toggle="tooltip"]').tooltip('hide');
 
-        var imageUrl = `${apiQrUrl}${host}`;
+        if(!generateOnClientSide){
 
-        Swal.showLoading();
+            Swal.showLoading();
+    
+            // Create an image element dynamically
+            var img = new Image();
+            img.onload = function () {
+                showQrCodeInSwal(`<div id="qrCode"><img alt="Generated QR Code" src="${img.src}"></div><p>${host}</p>`, host);
+            }
+    
+            // Set the source of the image
+            img.src = `${apiQrUrl}${host}`;
+        } else {
 
-        // Create an image element dynamically
-        var img = new Image();
-        img.onload = function () {
-            Swal.fire({
-                title: 'Scan to add to GrayJay',
-                imageUrl,
-                imageAlt: 'Generated QR Code',
-                html: `<p>QR code for ${host}:</p>`,
-                confirmButtonText: 'Open in grayjay',
-                showCancelButton: true,
-                showConfirmButton: isSupported,
-                cancelButtonText: 'Close',
-                buttonsStyling: false,
-                customClass: {
-                    actions: 'btn-group',
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-secondary'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    openInGrayJay(host);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Handle the "Cancel" button click
-                    // You can add your logic here
-                }
-            });
-        }
+            const qrText = `${apiConfUrl}${host}`;
 
+            let qr = qrcode(0, 'L');
+            qr.addData(qrText);
+            qr.make();
 
-        // Set the source of the image
-        img.src = `${apiQrUrl}${host}`;
+            let qrImg = qr.createImgTag(6, 8, "qr code of " + qrText);
+    
+            showQrCodeInSwal(`<div id="qrCode">${qrImg}</div><p>${host}</p>`, host);
+        }       
 
     }
 
@@ -148,26 +180,22 @@ $(document).ready(function () {
                     return 'URL is required';
                 }
             },
-            preConfirm: (url) => {
-                return new Promise((resolve, reject) => {
-                    const qrImage = new Image();
-                    qrImage.src = `${apiQrUrl}${url}`;
-                    qrImage.onload = () => {
-
-                        resolve({ url, qrImage });
-                    };
-                    qrImage.onerror = (error) => {
-
-                        reject('Failed to generate QR code. Please try again.');
-                    };
+            preConfirm: (host) => {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const validHost = await validateUrl(apiValidateUrl, host);
+                        resolve(validHost);
+                    } catch (error) {
+                        console.error('Error:', error.message);
+                        reject('Failed to validate URL. Please try again.');
+                    }
                 });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
 
             if (result.isConfirmed) {
-                const { url, qrImage } = result.value;
-                showQrCode(url);
+                showQrCode(result.value);
             }
 
         }).catch(function(){
