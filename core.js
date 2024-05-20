@@ -88,34 +88,46 @@ async function GetPluginConfig(peerTubePlatformUrl, protocol, hostname, cacheTtl
  * @throws {Error} - Throws error if URL is invalid or instance is invalid.
  */
 async function ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance) {
-    const host = (peerTubePlatformUrl || '').toLocaleLowerCase();
+    
+    let host = (peerTubePlatformUrl || '').toLocaleLowerCase().trim();
 
     // Check if URL is provided
     if (!host) {
         throw new Error('peerTubePlatformUrl query parameter is mandatory');
     }
 
-    // Construct platform URL
-    const platformUrl = `https://${host}`;
+    // Add https scheme if missing
+    if (!/^https?:\/\//.test(host)) {
+        host = `https://${host}`;
+    }
 
     try {
-        new URL(platformUrl);
+        // Validate URL format
+        new URL(host);
     } catch (error) {
         throw new Error(`Invalid PeerTube instance URL: ${host}`);
     }
 
-    let instanceConfig = {};
+    let instanceConfig;
 
     try {
         // Fetch instance config
-        instanceConfig = await axiosInstance.get(`${platformUrl}/api/v1/config/`);
-        
+        const response = await axiosInstance.get(`${host}/api/v1/config/`);
+        instanceConfig = response.data;
+
         // Check if instance config is valid
-        if (!instanceConfig.data || !instanceConfig.data.instance || !instanceConfig.data.instance.name || !instanceConfig.data.instance.shortDescription) {
-            throw new Error('Invalid PeerTube instance');
+        if (!instanceConfig || !instanceConfig.instance || !instanceConfig.instance.name || !instanceConfig.instance.shortDescription) {
+            throw new Error('Invalid PeerTube instance configuration');
         }
+
     } catch (error) {
-        throw new Error('Invalid PeerTube instance');
+        if (error.response) {
+            // Axios-specific error handling
+            throw new Error(`Failed to fetch PeerTube instance configuration: ${error.response.status} ${error.response.statusText}`);
+        } else {
+            // General error handling
+            throw new Error(`Invalid PeerTube instance: ${error.message}`);
+        }
     }
 }
 
