@@ -1,8 +1,16 @@
 $(document).ready(function () {
 
+    if (/^peertube-instances\.ir-to\.com$/i.test(window.location.hostname)) {
+        $('#platform-message').show();
+    
+        setTimeout(function () {
+            window.location.href = "https://grayjay-peertube.github.io/";
+        }, 3000);
+    }
+
+
+
     const apiQrUrl = 'https://peertube-instances.ir-to.com/api/v1/PluginQR?peerTubePlatformUrl=';
-
-
 
     const apiConfUrl = 'grayjay://plugin/https://peertube-instances.ir-to.com/api/v1/PluginConfig.json?peerTubePlatformUrl=';
     const peerTubeInstancesBaseUrl = 'https://instances.joinpeertube.org/api/v1/instances?start=0&count=1000&healthy=true&customizations=3&sort=-customizations&randomSortSeed=1714740'
@@ -111,7 +119,7 @@ $(document).ready(function () {
         scrollY: false, // Disable vertical scrolling
         initComplete: function () {
             $('#instancesTable tbody').on('dblclick ', 'tr', function () {
-                
+
                 var data = $('#instancesTable').DataTable().row(this).data();
 
                 showQrCode(data.host);
@@ -145,18 +153,18 @@ $(document).ready(function () {
                     const qrImage = new Image();
                     qrImage.src = `${apiQrUrl}${url}`;
                     qrImage.onload = () => {
-                        
+
                         resolve({ url, qrImage });
                     };
                     qrImage.onerror = (error) => {
-                        
+
                         reject('Failed to generate QR code. Please try again.');
                     };
                 });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
-            
+
             if (result.isConfirmed) {
                 const { url, qrImage } = result.value;
                 showQrCode(url);
