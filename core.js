@@ -151,10 +151,10 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     const upstreamConfigUrl = `${pluginBaseUrl}/${pluginConfigFileName}`;
 
     // Fetch upstream config data with caching
-    const upstramConfigData = await getUpstreamConfigData(upstreamConfigUrl, cacheTtl, axiosInstance);
+    const upstreamConfigData = await getUpstreamConfigData(upstreamConfigUrl, cacheTtl, axiosInstance);
 
     // Construct other URLs and data for plugin config
-    const scriptUrl = new URL(upstramConfigData.scriptUrl, `${pluginBaseUrl}/`).toString();
+    const scriptUrl = new URL(upstreamConfigData.scriptUrl, `${pluginBaseUrl}/`).toString();
     const hostUrl = GetHostUrl(protocol, hostname);
     const sourceUrl = GetConfigUrl(host, hostUrl);
 
@@ -168,9 +168,9 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
         sourceUrl,
         "repositoryUrl": hostUrl,
         scriptUrl,
-        "version": upstramConfigData.version,
-        "scriptSignature": upstramConfigData.scriptSignature,
-        "scriptPublicKey": upstramConfigData.scriptPublicKey,
+        "version": upstreamConfigData.version,
+        "scriptSignature": upstreamConfigData.scriptSignature,
+        "scriptPublicKey": upstreamConfigData.scriptPublicKey,
         "iconUrl": new URL("./peertube.png", hostUrl).toString(),
         id,
         "packages": [
