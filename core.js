@@ -156,7 +156,7 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     const description = instanceConfig.data.instance.shortDescription;
 
     // Define plugin base URL and config file name
-    const pluginBaseUrl = "https://plugins.grayjay.app/PeerTube";
+    const pluginBaseUrl = "https://plugins.grayjay.app/pre-release/PeerTube";
     const pluginConfigFileName = "PeerTubeConfig.json";
 
     // Construct URL for fetching upstream config
