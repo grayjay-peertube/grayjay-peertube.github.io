@@ -20,13 +20,29 @@ async function getUpstreamConfigData(upstreamConfigUrl, cacheTtl, axiosInstance)
         }
     }
 
-    // Fetch the data from the upstream server
-    const response = await axiosInstance.get(upstreamConfigUrl);
+    try {
+        // Fetch the data from the upstream server with timeout and error handling
+        const response = await axiosInstance.get(upstreamConfigUrl, {
+            timeout: 30000, // 30 second timeout
+            validateStatus: function (status) {
+                return status >= 200 && status < 300;
+            }
+        });
 
-    // Cache the fetched data along with the current timestamp
-    cache.set(upstreamConfigUrl, { data: response.data, timestamp: Date.now() });
+        // Cache the fetched data along with the current timestamp
+        cache.set(upstreamConfigUrl, { data: response.data, timestamp: Date.now() });
 
-    return response.data;
+        return response.data;
+    } catch (error) {
+        // If upstream config fails, throw a specific error
+        if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+            throw new Error('Timeout fetching plugin configuration from upstream server');
+        } else if (error.response) {
+            throw new Error(`Failed to fetch upstream plugin config: ${error.response.status} ${error.response.statusText}`);
+        } else {
+            throw new Error(`Upstream config fetch error: ${error.message}`);
+        }
+    }
 }
 
 /**
@@ -74,8 +90,13 @@ async function GetPluginConfig(peerTubePlatformUrl, protocol, hostname, cacheTtl
     // Validate PeerTube instance
     await ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance);
 
-    // Fetch instance config data
-    const instanceConfig = await axiosInstance.get(`https://${peerTubePlatformUrl}/api/v1/config/`);
+    // Fetch instance config data with error handling
+    const instanceConfig = await axiosInstance.get(`https://${peerTubePlatformUrl}/api/v1/config/`, {
+        timeout: 30000, // 30 second timeout
+        validateStatus: function (status) {
+            return status >= 200 && status < 300;
+        }
+    });
 
     // Generate plugin configuration JSON
     return generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname, instanceConfig, cacheTtl, axiosInstance);
@@ -111,8 +132,13 @@ async function ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance) {
     let instanceConfig;
 
     try {
-        // Fetch instance config
-        const response = await axiosInstance.get(`${host}/api/v1/config/`);
+        // Fetch instance config with timeout and retry logic
+        const response = await axiosInstance.get(`${host}/api/v1/config/`, {
+            timeout: 30000, // 30 second timeout
+            validateStatus: function (status) {
+                return status >= 200 && status < 300;
+            }
+        });
         instanceConfig = response.data;
 
         // Check if instance config is valid
@@ -121,7 +147,15 @@ async function ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance) {
         }
 
     } catch (error) {
-        if (error.response) {
+        if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+            throw new Error('Connection timeout - PeerTube instance not responding');
+        } else if (error.code === 'ENOTFOUND' || error.code === 'EAI_AGAIN') {
+            throw new Error('DNS resolution failed - PeerTube instance not found');
+        } else if (error.code === 'ECONNREFUSED') {
+            throw new Error('Connection refused - PeerTube instance unavailable');
+        } else if (error.code === 'EPROTO' || error.message.includes('SSL') || error.message.includes('TLS')) {
+            throw new Error('SSL/TLS connection error - Invalid certificate or protocol mismatch');
+        } else if (error.response) {
             // Axios-specific error handling
             throw new Error(`Failed to fetch PeerTube instance configuration: ${error.response.status} ${error.response.statusText}`);
         } else {

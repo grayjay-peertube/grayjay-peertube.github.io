@@ -41,8 +41,8 @@ app.get('/api/v1/PluginQR', async (req, res) => {
     res.set('Content-Type', 'image/png'); // Set the correct MIME type
     res.send(qrCodeImage); // Send image directly
   } catch (err) {
-    console.error('Error generating QR code:', err);
-    res.status(500).send('Invalid PeerTube instance');
+    console.error('Error generating QR code:', err.message || err);
+    res.status(500).json({ error: 'Invalid PeerTube instance' });
   }
 });
 
@@ -55,8 +55,8 @@ app.get('/api/v1/PluginConfig.json', async (req, res) => {
     const pluginConfig = await core.GetPluginConfig(peerTubePlatformUrl, protocol, hostname, 10000, axios);
     res.json(pluginConfig);
   } catch (error) {
-    console.error('Error generating plugin config:', error.message);
-    res.status(400).json({ error: error.message });
+    console.error('Error generating plugin config:', error.message || error);
+    res.status(400).json({ error: error.message || 'Failed to generate plugin configuration' });
   }
 });
 
@@ -67,9 +67,19 @@ app.get('/api/v1/validatePeerTube', async (req, res) => {
     await core.ValidatePeerTubeInstance(peerTubePlatformUrl, axios);
     res.json({ valid: true });
   } catch (err) {
-    console.error('Error validating PeerTube instance:', err);
-    res.json({ valid: false });
+    console.error('Error validating PeerTube instance:', err.message || err);
+    res.json({ valid: false, error: err.message });
   }
+});
+
+// Global error handlers
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error.message);
+  console.error(error.stack);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 const port = process.env.PORT || 80;
