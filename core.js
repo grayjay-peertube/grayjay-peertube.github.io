@@ -159,40 +159,26 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     const pluginBaseUrl = "https://plugins.grayjay.app/pre-release/PeerTube";
     const pluginConfigFileName = "PeerTubeConfig.json";
 
-    // Construct URL for fetching upstream config
-    const upstreamConfigUrl = `${pluginBaseUrl}/${pluginConfigFileName}`;
-
-    // Fetch upstream config data with caching
-    const upstreamConfigData = await getUpstreamConfigData(upstreamConfigUrl, cacheTtl, axiosInstance);
+    // Fetch remote plugin config from stable version
+    const remoteConfigUrl = `${pluginBaseUrl}/${pluginConfigFileName}`;
+    
+    // Fetch remote config data with caching
+    const remoteConfigData = await getUpstreamConfigData(remoteConfigUrl, cacheTtl, axiosInstance);
 
     // Construct other URLs and data for plugin config
-    const scriptUrl = new URL(upstreamConfigData.scriptUrl, `${pluginBaseUrl}/`).toString();
     const hostUrl = GetHostUrl(protocol, hostname);
     const sourceUrl = GetConfigUrl(host, hostUrl);
 
-    // Construct the plugin config object
+    // Use remote config as baseline and override instance-specific fields
     return {
+        ...remoteConfigData,
         name,
         description,
-        "author": hostUrl,
-        "authorUrl": hostUrl,
+        id,
         platformUrl,
         sourceUrl,
-        "repositoryUrl": hostUrl,
-        scriptUrl,
-        "version": upstreamConfigData.version,
-        "scriptSignature": upstreamConfigData.scriptSignature,
-        "scriptPublicKey": upstreamConfigData.scriptPublicKey,
-        "iconUrl": new URL("./peertube.png", hostUrl).toString(),
-        id,
-        "packages": [
-            "Http"
-        ],
-        "allowEval": false,
-        "allowUrls": [
-            "everywhere"
-        ],
         "constants": {
+            ...remoteConfigData.constants,
             "baseUrl": platformUrl
         }
     };
