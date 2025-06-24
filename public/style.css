@@ -367,29 +367,35 @@ body {
     font-family: inherit;
 }
 
+.swal2-popup .swal2-actions .swal2-confirm,
+.swal2-popup .swal2-actions .swal2-cancel {
+    margin: 0 5px;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 500 !important;
+    border: 2px solid transparent !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease !important;
+}
+
 .swal2-popup .swal2-actions .swal2-confirm {
-    margin-right: 10px;
-    background-color: var(--primary-color);
-    border-radius: 8px;
-    padding: 0.625rem 1.5rem;
-    font-weight: 500;
+    background-color: var(--primary-color) !important;
+    color: white !important;
 }
 
 .swal2-popup .swal2-actions .swal2-confirm:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--primary-dark) !important;
+    transform: translateY(-1px) !important;
 }
 
 .swal2-popup .swal2-actions .swal2-cancel {
-    margin-left: 10px;
-    background-color: #e5e7eb;
-    color: var(--text-primary);
-    border-radius: 8px;
-    padding: 0.625rem 1.5rem;
-    font-weight: 500;
+    background-color: #e5e7eb !important;
+    color: var(--text-primary) !important;
 }
 
 .swal2-popup .swal2-actions .swal2-cancel:hover {
-    background-color: #d1d5db;
+    background-color: #d1d5db !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Responsive adjustments */
