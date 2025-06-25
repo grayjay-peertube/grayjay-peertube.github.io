@@ -202,6 +202,7 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     // Construct other URLs and data for plugin config
     const hostUrl = GetHostUrl(protocol, hostname);
     const sourceUrl = GetConfigUrl(host, hostUrl);
+    const scriptUrl = new URL(remoteConfigData.scriptUrl, `${pluginBaseUrl}/`).toString();
 
     // Use remote config as baseline and override instance-specific fields
     return {
@@ -211,6 +212,7 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
         id,
         platformUrl,
         sourceUrl,
+        scriptUrl,
         "constants": {
             ...remoteConfigData.constants,
             "baseUrl": platformUrl
