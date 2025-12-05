@@ -204,6 +204,11 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
     const sourceUrl = GetConfigUrl(host, hostUrl);
     const scriptUrl = new URL(remoteConfigData.scriptUrl, `${pluginBaseUrl}/`).toString();
 
+    if(remoteConfigData.authentication) {
+        remoteConfigData.authentication.loginUrl = `${platformUrl}/login`;
+        remoteConfigData.authentication.completionUrl = `${platformUrl}/api/v1/users/me?*`;
+    }
+
     // Use remote config as baseline and override instance-specific fields
     return {
         ...remoteConfigData,
