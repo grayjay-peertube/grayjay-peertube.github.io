@@ -1,6 +1,7 @@
 const path = require('path');
 const axios = require('axios');
 const cors = require('cors'); // Import CORS middleware
+const packageJson = require('./package.json');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const core = require('./core');
@@ -26,6 +27,11 @@ app.use(cors(corsOptions));
 // Define a route to serve index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(publicFolder, 'index.html')); // Assuming index.html is in the 'public' directory
+});
+
+// Define an endpoint to expose the version
+app.get('/version', (req, res) => {
+  res.json({ version: packageJson.version });
 });
 
 // Define your endpoint for PluginQR
