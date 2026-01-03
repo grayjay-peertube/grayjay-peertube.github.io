@@ -218,6 +218,7 @@ async function generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname,
         platformUrl,
         sourceUrl,
         scriptUrl,
+        iconUrl: 'https://plugins.grayjay.app/PeerTube/peertube.png',
         "constants": {
             ...remoteConfigData.constants,
             "baseUrl": platformUrl
