@@ -2,11 +2,23 @@ $(document).ready(function () {
 
     if (/^peertube-instances\.ir-to\.com$/i.test(window.location.hostname)) {
         $('#platform-message').show();
-    
+
         setTimeout(function () {
             window.location.href = "https://grayjay-peertube.github.io/";
         }, 3000);
     }
+
+    // Disclaimer acknowledgement
+    const DISCLAIMER_KEY = 'disclaimerAcknowledged';
+
+    if (!localStorage.getItem(DISCLAIMER_KEY)) {
+        $('#disclaimerAlert').show();
+    }
+
+    $('#acknowledgeBtn').click(function () {
+        localStorage.setItem(DISCLAIMER_KEY, 'true');
+        $('#disclaimerAlert').fadeOut();
+    });
 
     const apiBaseUrl='https://peertube-instances.ir-to.com';
 
