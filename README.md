@@ -14,4 +14,4 @@ It provides a user-friendly interface for browsing PeerTube instances, displayin
 ## Usage
 This is a static site hosted on GitHub Pages at [grayjay-peertube.github.io](https://grayjay-peertube.github.io/).
 
-To run locally, serve the `public/` folder with any static file server.
+To run locally, serve the root folder with any static file server.
