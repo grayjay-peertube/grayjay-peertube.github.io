@@ -34,24 +34,6 @@ app.get('/version', (req, res) => {
   res.json({ version: packageJson.version });
 });
 
-// Define your endpoint for PluginQR
-app.get('/api/v1/PluginQR', async (req, res) => {
-  try {
-    const { peerTubePlatformUrl } = req.query;
-    await core.ValidatePeerTubeInstance(peerTubePlatformUrl, axios);
-    const protocol = req.protocol;
-    const hostname = req.hostname;
-    var hostUrl = core.GetHostUrl(protocol, hostname);
-    const sourceUrl = core.GetConfigUrl(peerTubePlatformUrl, hostUrl);
-    const qrCodeImage = await core.GetQRCode(sourceUrl);
-    res.set('Content-Type', 'image/png'); // Set the correct MIME type
-    res.send(qrCodeImage); // Send image directly
-  } catch (err) {
-    console.error('Error generating QR code:', err.message || err);
-    res.status(500).json({ error: 'Invalid PeerTube instance' });
-  }
-});
-
 // Define your endpoint for PluginConfig.json
 app.get('/api/v1/PluginConfig.json', async (req, res) => {
   try {
