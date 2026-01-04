@@ -62,7 +62,7 @@ function GetHostUrl(requestProtocol, backendHostname) {
  * @returns {string} - The constructed config URL.
  */
 function GetConfigUrl(peerTubeInstanceUrl, backendUrl) {
-    const sourceUrl = new URL(`/api/v1/PluginConfig.json?peerTubePlatformUrl=${peerTubeInstanceUrl}`, backendUrl).toString();
+    const sourceUrl = new URL(`/api/v1/PluginConfig.json?peerTubePlatformUrl=${encodeURIComponent(peerTubeInstanceUrl)}`, backendUrl).toString();
     return sourceUrl;
 }
 
@@ -76,11 +76,15 @@ function GetConfigUrl(peerTubeInstanceUrl, backendUrl) {
  * @returns {Promise<object>} - Resolves with the plugin configuration.
  */
 async function GetPluginConfig(peerTubePlatformUrl, protocol, hostname, cacheTtl, axiosInstance) {
+    // Normalize URL - strip protocol if present
+    let host = (peerTubePlatformUrl || '').toLowerCase().trim();
+    host = host.replace(/^https?:\/\//, '');
+
     // Validate PeerTube instance
-    await ValidatePeerTubeInstance(peerTubePlatformUrl, axiosInstance);
+    await ValidatePeerTubeInstance(host, axiosInstance);
 
     // Fetch instance config data with error handling
-    const instanceConfig = await axiosInstance.get(`https://${peerTubePlatformUrl}/api/v1/config/`, {
+    const instanceConfig = await axiosInstance.get(`https://${host}/api/v1/config/`, {
         timeout: 30000, // 30 second timeout
         validateStatus: function (status) {
             return status >= 200 && status < 300;
@@ -88,7 +92,7 @@ async function GetPluginConfig(peerTubePlatformUrl, protocol, hostname, cacheTtl
     });
 
     // Generate plugin configuration JSON
-    return generatePluginConfigJson(peerTubePlatformUrl, protocol, hostname, instanceConfig, cacheTtl, axiosInstance);
+    return generatePluginConfigJson(host, protocol, hostname, instanceConfig, cacheTtl, axiosInstance);
 }
 
 /**
