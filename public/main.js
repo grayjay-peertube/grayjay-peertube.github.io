@@ -10,7 +10,6 @@ $(document).ready(function () {
 
     const apiBaseUrl='https://peertube-instances.ir-to.com';
 
-    const apiQrUrl = `${apiBaseUrl}/api/v1/PluginQR?peerTubePlatformUrl=`;
     const apiValidateUrl = `${apiBaseUrl}/api/v1/validatePeerTube?peerTubePlatformUrl=`;
     const apiConfUrl = `grayjay://plugin/${apiBaseUrl}/api/v1/PluginConfig.json?peerTubePlatformUrl=`;
 
@@ -77,29 +76,16 @@ $(document).ready(function () {
         }
     }
 
-    function showQrCode(host, generateOnClientSide = true) {
-        if(!generateOnClientSide){
-            Swal.showLoading();
-    
-            // Create an image element dynamically
-            var img = new Image();
-            img.onload = function () {
-                showQrCodeInSwal(`<div id="qrCode"><img alt="Generated QR Code" src="${img.src}"></div><p>${host}</p>`, host);
-            }
-    
-            // Set the source of the image
-            img.src = `${apiQrUrl}${host}`;
-        } else {
-            const qrText = `${apiConfUrl}${host}`;
+    function showQrCode(host) {
+        const qrText = `${apiConfUrl}${host}`;
 
-            let qr = qrcode(0, 'L');
-            qr.addData(qrText);
-            qr.make();
+        let qr = qrcode(0, 'L');
+        qr.addData(qrText);
+        qr.make();
 
-            let qrImg = qr.createImgTag(6, 8, "qr code of " + qrText);
-    
-            showQrCodeInSwal(`<div id="qrCode">${qrImg}</div><p>${host}</p>`, host);
-        }       
+        let qrImg = qr.createImgTag(6, 8, "qr code of " + qrText);
+
+        showQrCodeInSwal(`<div id="qrCode">${qrImg}</div><p>${host}</p>`, host);
     }
 
     // Format large numbers
