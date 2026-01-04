@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const QRCode = require('qrcode');
 
 // Define a cache object to store fetched data
 const cache = new Map();
@@ -54,16 +53,6 @@ async function getUpstreamConfigData(upstreamConfigUrl, cacheTtl, axiosInstance)
 function GetHostUrl(requestProtocol, backendHostname) {
     const hostUrl = `${(process.env.PROTOCOL || requestProtocol)}://${(process.env.CONFIG_HOST || backendHostname)}`;
     return hostUrl;
-}
-
-/**
- * Generates a QR code image for the given URL.
- * @param {string} url - The URL to generate the QR code for.
- * @returns {Promise<Buffer>} - Resolves with the QR code image buffer.
- */
-async function GetQRCode(url) {
-    const qrCodeImage = await QRCode.toBuffer(url);
-    return qrCodeImage;
 }
 
 /**
@@ -231,6 +220,5 @@ module.exports = {
     GetHostUrl,
     GetConfigUrl,
     GetPluginConfig,
-    GetQRCode,
     ValidatePeerTubeInstance
 };
