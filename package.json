@@ -1,5 +1,5 @@
 {
-  "name": "greyjaypeertubedinamicplugin",
+  "name": "grayjaypeertubedynamicplugin",
   "version": "1.0.2",
   "description": "",
   "main": "index.js",
@@ -14,10 +14,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.8",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "qrcode": "^1.5.3"
+    "axios": "1.13.2",
+    "cors": "2.8.5",
+    "dotenv": "16.5.0",
+    "express": "4.22.1",
+    "qrcode": "1.5.4"
   }
 }
